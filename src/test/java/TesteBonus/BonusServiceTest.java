@@ -2,6 +2,7 @@ package TesteBonus;
 
 import br.com.alura.tdd.modelo.Funcionario;
 import br.com.alura.tdd.service.BonusService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -12,14 +13,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BonusServiceTest {
 
+    private BonusService service;
+    private Funcionario funcionario;
+
+    @BeforeEach
+    public void inicializar(){
+        this.service = new BonusService();
+        this.funcionario = new Funcionario("Taissa", LocalDate.now(), new BigDecimal("10000"));
+    }
+
     @Test
     void bonusDeveriaSerZeroParaFuncionarioComSalarioAlto(){
 
-        BonusService service = new BonusService();
 //    forma limpa
-//    assertThrows(IllegalArgumentException.class, () ->service.calcularBonus
-//                (new Funcionario("Taissa", LocalDate.now(), new BigDecimal("25000"))));
-
+//    assertThrows(IllegalArgumentException.class, () ->service.calcularBonus(new Funcionario("Taissa", LocalDate.now(), new BigDecimal("25000"))));
         //possivel forma de capturar exception
         try {
             service.calcularBonus(new Funcionario("Taissa", LocalDate.now(), new BigDecimal("25000")));
@@ -31,21 +38,14 @@ public class BonusServiceTest {
 
     @Test
     void bonusDeveriaSerDezPorCentoDoSalario(){
-
-        BonusService service = new BonusService();
-        BigDecimal bonus = service.calcularBonus(new Funcionario("Taissa", LocalDate.now(),
-                new BigDecimal("2500")));
-
-        assertEquals(new BigDecimal("250.00"), bonus);
+        BigDecimal bonus = service.calcularBonus(funcionario);
+        assertEquals(new BigDecimal("1000.00"), bonus);
     }
 
     @Test
     void bonusDeveriaSerDezPorCentoParaSalarioDeDezMil(){
 
-        BonusService service = new BonusService();
-        BigDecimal bonus = service.calcularBonus(new Funcionario("Taissa", LocalDate.now(),
-                new BigDecimal("10000")));
-
+        BigDecimal bonus = service.calcularBonus(funcionario);
         assertEquals(new BigDecimal("1000.00"), bonus);
     }
 
